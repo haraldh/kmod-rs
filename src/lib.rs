@@ -2,8 +2,6 @@
 //!
 //! # Example
 //! ```
-//! extern crate kmod;
-//!
 //! fn main() {
 //!     // create a new kmod context
 //!     let ctx = kmod::Context::new().unwrap();
@@ -22,14 +20,37 @@
 //!     }
 //! }
 //! ```
-#[macro_use] extern crate error_chain;
-#[macro_use] extern crate log;
-extern crate errno;
-extern crate kmod_sys;
+#![deny(
+    warnings,
+    absolute_paths_not_starting_with_crate,
+    deprecated_in_future,
+    keyword_idents,
+    macro_use_extern_crate,
+    trivial_numeric_casts,
+    unused_extern_crates,
+    unused_import_braces,
+    unused_qualifications,
+    unused_results,
+    unused_labels,
+    unused_lifetimes,
+    unreachable_pub,
+    future_incompatible,
+    missing_doc_code_examples,
+    rust_2018_idioms,
+    rust_2018_compatibility
+)]
+
+pub use ctx::*;
+pub use errors::{Error, ErrorKind, Result};
+pub use modules::*;
+pub use errno::Errno;
 
 mod errors {
     use std;
+
     use errno::Errno;
+
+    use error_chain::error_chain;
 
     error_chain! {
         errors {
@@ -43,13 +64,9 @@ mod errors {
         }
     }
 }
-pub use errors::{Result, Error, ErrorKind};
 
 mod ctx;
 mod modules;
-
-pub use ctx::*;
-pub use modules::*;
 
 #[cfg(test)]
 mod tests {
